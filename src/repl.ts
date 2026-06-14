@@ -1,4 +1,5 @@
 import { createInterface } from "readline";
+import { getCommands } from "./commands";
 
 export function cleanInput(input: string): string[] {
     const lowercaseInput = input.toLowerCase().trim();
@@ -18,7 +19,24 @@ export function startREPL() {
             rl.prompt()
             return;
         }
-        console.log(`Your command was: ${clean[0]}`);
+        
+        const commandName = clean[0]
+        const commands = getCommands();
+        const cmd = commands[commandName];
+        if (!cmd) {
+        console.log(
+            `Unknown command: "${commandName}". Type "help" for a list of commands.`,
+        );
         rl.prompt();
-    });
+        return;
+        }
+
+        try {
+        cmd.callback(commands);
+        } catch (e) {
+        console.log(e);
+        }
+
+        rl.prompt();
+        });
 }
