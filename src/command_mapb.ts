@@ -1,0 +1,15 @@
+import { State } from "./state";
+
+export async function commandMapb(state: State): Promise<void> {
+    if (state.prevLocationsURL === null) {
+        console.log("you're on the first page");
+        return;
+    }
+    const locations = await state.pokeAPI.fetchLocations(state.prevLocationsURL);
+    for (const location of locations.results) {
+        console.log(location.name)
+    };
+    state.nextLocationsURL = locations.next;
+    state.prevLocationsURL = locations.previous;
+};
+

@@ -1,17 +1,19 @@
-import { readdir, readlink } from "fs";
 import { createInterface, type Interface } from "readline";
-import { Readline } from "readline/promises";
 import { getCommands } from "./commands";
+import { PokeAPI } from "./pokeapi";
 
 export type State = {
     readline: Interface;
     commands: Record<string, CLICommand>;
+    pokeAPI: PokeAPI; 
+    nextLocationsURL: string | null;
+    prevLocationsURL: string | null;
 };
 
 export type CLICommand = {
   name: string;
   description: string;
-  callback: (state: State) => void;
+  callback: (state: State) => Promise<void>;
 };
 
 export function initState() {
@@ -24,5 +26,8 @@ export function initState() {
     return {
         readline: rl,
         commands: getCommands(),
+        pokeAPI: new PokeAPI(),
+        nextLocationsURL: null,
+        prevLocationsURL: null,
     };
 };
