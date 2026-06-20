@@ -1,4 +1,4 @@
-import { State } from "./state";
+import type { State } from "./state.js";
 
 export async function commandMapb(state: State): Promise<void> {
     if (state.prevLocationsURL === null) {

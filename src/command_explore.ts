@@ -1,4 +1,4 @@
-import { State } from "./state";
+import type { State } from "./state.js";
 
 export async function commandExplore(state: State, ...args: string[]): Promise<void> {
     const location = args[0];

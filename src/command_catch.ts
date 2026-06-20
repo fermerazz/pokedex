@@ -1,4 +1,4 @@
-import { State } from "./state";
+import type { State } from "./state.js";
 
 export async function commandCatch(state: State, pokemon: string): Promise<void> {
     console.log(`Throwing a Pokeball at ${pokemon}...`);
