@@ -8,6 +8,21 @@ export class PokeAPI {
     this.cache = new Cache(cacheInterval);
   }
 
+  async fetchPokemon(pokemon: string): Promise<PokemonData>{
+    const url = `${PokeAPI.baseURL}/pokemon/${pokemon}`;
+    const cached = this.cache.get<PokemonData>(url);
+    if (cached) {
+      return cached;
+    };
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`status: ${response.status}`);
+    };
+    const data: PokemonData = await response.json();
+    this.cache.add(url, data);
+    return data;
+  };
+
   async fetchLocations(pageURL?: string | null): Promise<ShallowLocations> {
     const url = pageURL || `${PokeAPI.baseURL}/location-area`;
     const cached = this.cache.get(url);
@@ -37,6 +52,11 @@ export class PokeAPI {
     this.cache.add(url, location);
     return location;
   };
+};
+
+export  type PokemonData = {
+  name: string;
+  base_experience: number;
 };
 
 export type ShallowLocations = {
